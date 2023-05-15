@@ -44,9 +44,9 @@ const RecommendDropdown = ({ inputText, recommendations, setRecommendations, han
       ))}
       <div className='dropdown-logo'>
         {isLoading ? (
-          <img className='dropdown-spinner' src='/images/Ellipse 21.svg' alt='loading' />
+          <img className='dropdown-spinner' src='/images/loading.svg' alt='loading' />
         ) : (
-          <img src='/images/Union.svg' alt='more' />
+          <img src='/images/more.svg' alt='more' />
         )}
       </div>
     </div>

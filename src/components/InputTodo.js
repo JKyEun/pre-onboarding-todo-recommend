@@ -1,4 +1,3 @@
-import { FaPlusCircle, FaSpinner } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 
 import { createTodo } from '../api/todo';
@@ -92,6 +91,9 @@ const InputTodo = ({ setTodos }) => {
   return (
     <>
       <form className='form-container' onSubmit={handleSubmit}>
+        <div className='search-div'>
+          <img className='search-icon' src='/images/search.svg' alt='search' />
+        </div>
         <input
           className='input-text'
           placeholder='Add new todo...'
@@ -100,12 +102,10 @@ const InputTodo = ({ setTodos }) => {
           onChange={handleInputChange}
           disabled={isLoading}
         />
-        {!isLoading ? (
-          <button className='input-submit' type='submit'>
-            <FaPlusCircle className='btn-plus' />
-          </button>
+        {isLoading ? (
+          <img className='spinner' src='/images/loading.svg' alt='loading' />
         ) : (
-          <FaSpinner className='spinner' />
+          <span className='filler'></span>
         )}
         {inputText.length > 0 && (
           <RecommendDropdown
