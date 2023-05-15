@@ -69,6 +69,8 @@ const InputTodo = ({ setTodos }) => {
   const handleRecommendationClick = async el => {
     try {
       setIsLoading(true);
+      setRecommendations([]);
+      setInputText('');
       const { data } = await createTodo({ title: el });
       if (data) {
         setTodos(prev => [...prev, data]);
@@ -77,8 +79,6 @@ const InputTodo = ({ setTodos }) => {
       console.error(error);
       alert('Something went wrong.');
     } finally {
-      setInputText('');
-      setRecommendations([]);
       setIsLoading(false);
     }
   };
