@@ -2,7 +2,7 @@ import apiRequest from './index';
 
 const RESOURCE = '/search';
 
-export const getRecommendList = async data => {
+const getRecommendList = async data => {
   try {
     const response = await apiRequest.get(`${RESOURCE}`, { params: data });
 
@@ -11,3 +11,5 @@ export const getRecommendList = async data => {
     throw new Error('API getRecommendList error');
   }
 };
+
+export default getRecommendList;

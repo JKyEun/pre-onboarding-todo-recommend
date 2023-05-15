@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
+import Header from '../components/Header';
+import InputTodo from '../components/InputTodo';
+import TodoList from '../components/TodoList';
+import { getTodoList } from '../api/todo';
+import { Todo } from '../types/todo';
 
-import Header from "../components/Header";
-import InputTodo from "../components/InputTodo";
-import TodoList from "../components/TodoList";
-import { getTodoList } from "../api/todo";
-
-const Main = () => {
-  const [todoListData, setTodoListData] = useState([]);
+function Main() {
+  const [todoListData, setTodoListData] = useState<Todo[]>([]);
 
   useEffect(() => {
     (async () => {
@@ -24,6 +24,6 @@ const Main = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Main;

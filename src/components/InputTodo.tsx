@@ -1,29 +1,20 @@
-import { useEffect, useState } from 'react';
-
+import React, { useEffect, useState } from 'react';
 import { createTodo } from '../api/todo';
 import useFocus from '../hooks/useFocus';
 import useDebounce from '../hooks/useDebounce';
 import RecommendDropdown from './RecommendDropdown';
-import { getRecommendList } from '../api/search';
+import getRecommendList from '../api/search';
+import { Todo } from '../types/todo';
 
-const InputTodo = ({ setTodos }) => {
-  const [inputText, setInputText] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [recommendations, setRecommendations] = useState([]);
+function InputTodo({ setTodos }: { setTodos: React.Dispatch<React.SetStateAction<Todo[]>> }) {
+  const [inputText, setInputText] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [recommendations, setRecommendations] = useState<string[]>([]);
   const { ref, setFocus } = useFocus();
 
   useEffect(() => {
     setFocus();
   }, [setFocus]);
-
-  useEffect(() => {
-    if (inputText === '') {
-      setRecommendations([]);
-    } else {
-      debouncedFetch();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [inputText]);
 
   const fetchRecommendations = async () => {
     try {
@@ -41,7 +32,15 @@ const InputTodo = ({ setTodos }) => {
 
   const debouncedFetch = useDebounce(fetchRecommendations, 500);
 
-  const handleSubmit = async e => {
+  useEffect(() => {
+    if (inputText === '') {
+      setRecommendations([]);
+    } else {
+      debouncedFetch();
+    }
+  }, [inputText]);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault();
       setIsLoading(true);
@@ -55,7 +54,7 @@ const InputTodo = ({ setTodos }) => {
       const { data } = await createTodo(newItem);
 
       if (data) {
-        return setTodos(prev => [...prev, data]);
+        setTodos((prev: Todo[]) => [...prev, data]);
       }
     } catch (error) {
       console.error(error);
@@ -66,7 +65,7 @@ const InputTodo = ({ setTodos }) => {
     }
   };
 
-  const handleRecommendationClick = async el => {
+  const handleRecommendationClick = async (el: string) => {
     try {
       setIsLoading(true);
       setRecommendations([]);
@@ -83,41 +82,35 @@ const InputTodo = ({ setTodos }) => {
     }
   };
 
-  const handleInputChange = e => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newText = e.target.value;
     setInputText(newText);
   };
 
   return (
-    <>
-      <form className='form-container' onSubmit={handleSubmit}>
-        <div className='search-div'>
-          <img className='search-icon' src='/images/search.svg' alt='search' />
-        </div>
-        <input
-          className='input-text'
-          placeholder='Add new todo...'
-          ref={ref}
-          value={inputText}
-          onChange={handleInputChange}
-          disabled={isLoading}
+    <form className="form-container" onSubmit={handleSubmit}>
+      <div className="search-div">
+        <img className="search-icon" src="/images/search.svg" alt="search" />
+      </div>
+      <input
+        className="input-text"
+        placeholder="Add new todo..."
+        ref={ref}
+        value={inputText}
+        onChange={handleInputChange}
+        disabled={isLoading}
+      />
+      {isLoading ? <img className="spinner" src="/images/loading.svg" alt="loading" /> : <span className="filler" />}
+      {inputText.length > 0 && (
+        <RecommendDropdown
+          inputText={inputText}
+          recommendations={recommendations}
+          setRecommendations={setRecommendations}
+          handleRecommendationClick={handleRecommendationClick}
         />
-        {isLoading ? (
-          <img className='spinner' src='/images/loading.svg' alt='loading' />
-        ) : (
-          <span className='filler'></span>
-        )}
-        {inputText.length > 0 && (
-          <RecommendDropdown
-            inputText={inputText}
-            recommendations={recommendations}
-            setRecommendations={setRecommendations}
-            handleRecommendationClick={handleRecommendationClick}
-          />
-        )}
-      </form>
-    </>
+      )}
+    </form>
   );
-};
+}
 
 export default InputTodo;
