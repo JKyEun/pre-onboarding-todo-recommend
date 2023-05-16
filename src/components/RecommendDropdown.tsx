@@ -17,8 +17,8 @@ function RecommendDropdown({
       setLoading(true);
       const response = await getRecommendList({ q: inputText, page: page + 1, limit: 10 });
       const recommendedItems = response.data.result;
-      setRecommendations(prevRecommendations => [...prevRecommendations, ...recommendedItems]);
-      setPage(prevPage => prevPage + 1);
+      setRecommendations(prev => [...prev, ...recommendedItems]);
+      setPage(prev => prev + 1);
     } catch (error) {
       console.error(error);
     } finally {

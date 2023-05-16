@@ -10,13 +10,11 @@ function TodoItem({ id, title, setTodos }: TodoItemProps) {
     try {
       setIsLoading(true);
       await deleteTodo(id);
-
+      setIsLoading(false);
       setTodos((prev: Todo[]) => prev.filter((item: Todo) => item.id !== id));
     } catch (error) {
       console.error(error);
       alert('Something went wrong.');
-    } finally {
-      setIsLoading(false);
     }
   }, [id, setTodos]);
 
